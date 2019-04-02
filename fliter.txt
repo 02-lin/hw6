@@ -1,0 +1,57 @@
+function fliter
+%对加高斯噪声的图像分别使用算术均值，几何均值，谐波均值，逆谐波均值滤波器以及中值滤波器
+
+%========图像添加高斯噪声===================================================
+I=im2double(imread('C:\Users\lenovo\Desktop\数字图像处理\第六次作业\第6次作业\lena.bmp'));
+IG=imnoise(I,'gaussian',0.1,0.01);
+%g=imnoise(f,'gaussian',m,var)将均值m,方差为var的高斯噪声加到图像f上，默认值是均值m为0，方差var为0.01的噪声。
+%========图像添加椒盐噪声===================================================
+IP=imnoise(I,'salt & pepper',0.1);
+
+%=======对高斯噪声噪声进行处理==============================================
+ig1=fspecial('average',[5,5]);%5*5均值滤波
+ig1=imfilter(IG,ig1);
+figure(1)
+subplot(1,2,1);imshow(IG);title('高斯噪声污染');
+subplot(1,2,2);imshow(ig1);title('5*5算数均值滤波(高斯)');
+
+ig2=exp(imfilter(log(IG),fspecial('average',5)));%几何均值滤波
+figure(2)
+subplot(1,2,1);imshow(IG);title('高斯噪声污染');
+subplot(1,2,2);imshow(ig2);title('5*5 几何均值滤波（高斯）');
+
+q1=1.5;
+ig3=imfilter(IG.^(q1+1),fspecial('average',5))./imfilter(IG.^q1,fspecial('average',5));
+figure(3)
+subplot(1,2,1);imshow(IG);title('高斯噪声污染');
+subplot(1,2,2);imshow(ig3);title('Q>0,逆谐波滤波器（高斯）');
+
+q2=-1.5;
+ig4=imfilter(IG.^(q2+1),fspecial('average',5))./imfilter(IG.^q2,fspecial('average',5));
+figure(4)
+subplot(1,2,1);imshow(IG);title('高斯噪声污染');
+subplot(1,2,2);imshow(ig4);title('Q<0,逆谐波滤波器（高斯）');
+
+%=======对椒盐噪声噪声进行处理==============================================
+ip1=fspecial('average',[5,5]);%5*5均值滤波
+ip1=imfilter(IP,ip1);
+figure(5)
+subplot(1,2,1);imshow(IP);title('椒盐噪声污染');
+subplot(1,2,2);imshow(ip1);title('5*5算数均值滤波(椒盐)');
+
+ip2=exp(imfilter(log(IP),fspecial('average',5)));%几何均值滤波
+figure(6)
+subplot(1,2,1);imshow(IP);title('椒盐噪声污染');
+subplot(1,2,2);imshow(ip2);title('5*5 几何均值滤波（椒盐）');
+
+q1=1.5;
+ip3=imfilter(IP.^(q1+1),fspecial('average',5))./imfilter(IP.^q1,fspecial('average',5));
+figure(7)
+subplot(1,2,1);imshow(IP);title('椒盐噪声污染');
+subplot(1,2,2);imshow(ip3);title('Q>0,逆谐波滤波器（椒盐）');
+
+q2=-1.5;
+ip4=imfilter(IP.^(q2+1),fspecial('average',5))./imfilter(IP.^q2,fspecial('average',5));
+figure(8)
+subplot(1,2,1);imshow(IP);title('椒盐噪声污染');
+subplot(1,2,2);imshow(ip4);title('Q<0,逆谐波滤波器（椒盐）');

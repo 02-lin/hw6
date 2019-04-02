@@ -1,0 +1,29 @@
+function yueshu
+% 按照EP5.8-6书写和调用matlab函数书写
+I0=im2double(imread('C:\Users\lenovo\Desktop\数字图像处理\第六次作业\第6次作业\lena.bmp'));
+%======调用matlab==========================================================
+H=fspecial('motion',50,45);
+I1=imfilter(I0,H,'circular','conv');%运动模糊
+I2=imnoise(I1,'gaussian',0,0.001);%加高斯噪声+运动模糊
+v=0.0000001;
+noisePower=v*prod(size(I0));
+[g,lag]=deconvreg(I1,H,noisePower);
+
+%====不调用matlab==========================================================
+p=[0 -1 0;-1 4 -1;0 -1 0];%拉普拉斯模板
+[m,n]=size(I0);
+p=psf2otf(p,[m,n]);
+h=psf2otf(H,[m,n]);%退化函数的FFT
+gama=0.01;%gama 是参数
+If=fft2(I2);
+fu=conj(h);%求复共轭
+d=h.^2+gama*(p.^2);
+d2=ifft2(fu.*If./d);%EP 5.9-4
+    
+figure(1)
+subplot(1,2,1);imshow(I2);title('运动模糊+噪声');
+subplot(1,2,2);imshow(d2);title('约束最小二乘滤波后(self)');
+
+figure(2)
+subplot(1,2,1);imshow(I2);title('运动模糊+噪声');
+subplot(1,2,2);imshow(g);title('约束最小二乘滤波后（调用matlab）');

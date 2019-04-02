@@ -1,0 +1,39 @@
+function weina
+% 按照EP5.8-6书写和调用matlab函数书写
+I0=im2double(imread('CUserslenovoDesktop数字图像处理第六次作业第6次作业lena.bmp'));
+%======调用matlab==========================================================
+H=fspecial('motion',50,45);
+I1=imfilter(I0,H,'circular','conv');%运动模糊
+I2=imnoise(I1,'gaussian',0,0.01);%加高斯噪声
+noise=imnoise(zeros(size(I0)),'gaussian',0,0.01);
+NSR=sum(noise().^2)sum(im2double(I0()).^2);
+I3=deconvwnr(I2,H,NSR);
+figure(1)
+subplot(1,2,1);imshow(I0);title('原始');
+subplot(1,2,2);imshow(I1);title('运动模糊(调用matlab)');
+figure(2)
+subplot(1,2,1);imshow(I2);title('运动模糊+噪声');
+subplot(1,2,2);imshow(I3);title('维纳滤波后（调用matlab）');
+
+
+%====== 不调用matlab=======================================================
+f=double(I2);
+F=fft2(f);
+F=fftshift(F);
+[m,n]=size(F);
+a=0.1;b=0.1;T=0.1;k=0.03;
+for i=1m
+    for j=in
+        H(i,j)=(T(pi(ia+jb)))sin(pi(ia+jb))exp(-sqrt(-1)pi(ia+jb));
+        G(i,j)=1(abs(H(i,j)))^2F(i,j)(((abs(H(i,j)))^2+k)H(i,j));
+    end
+end
+G=ifftshift(G);
+g=ifft2(G);
+g=256.g.max(max(g));
+g=uint8(real(g));
+figure(3);
+subplot(1,2,1);imshow(I2);title('运动模糊+高斯噪声');
+subplot(1,2,2);imshow(g);title('维纳滤波后');
+
+

@@ -1,0 +1,14 @@
+function Noise
+%========图像添加高斯噪声===================================================
+I=imread('C:\Users\lenovo\Desktop\数字图像处理\第六次作业\第6次作业\lena.bmp');
+IG=imnoise(I,'gaussian',0.1,0.01);
+%g=imnoise(f,'gaussian',m,var)将均值m,方差为var的高斯噪声加到图像f上，默认值是均值m为0，方差var为0.01的噪声。
+%========图像添加椒盐噪声===================================================
+IP=imnoise(I,'salt & pepper',0.1);
+%========画图==============================================================
+figure;imshow(I);title('lena 原始图像');
+
+figure(2)
+subplot(1,2,1);imshow(IG);title('lena 高斯噪声污染（均值0.1，方差0.01）');
+subplot(1,2,2);imshow(IP);title('lena 椒盐噪声污染（噪声密度0.1）');
+
